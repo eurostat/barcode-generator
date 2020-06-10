@@ -1,0 +1,81 @@
+{
+  "name": "barcode-generator",
+  "version": "0.3.5",
+  "description": "a simplified barcode generator tool with ",
+  "main": "dist/barcodegenerator.js",
+  "scripts": {
+    "start": "webpack-dev-server --watch --color --env=dev --progress --mode=development --open",
+    "build:prod": "webpack --env=prod --progress --profile --colors",
+    "serve": "webpack-dev-server --watch --color --env=dev --progress --mode=development --open",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:all": "npm run build:prod -- --useConfig:unemployment && npm run build:prod -- --useConfig:rdpersonnell && npm run build:prod -- --useConfig:forestarea"
+  },
+  "sideEffects": [
+    "dist/**/*.css",
+    "src/**/*.js"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/eurostat/barcode-generator"
+  },
+  "npmName": "barcode-generator",
+  "npmFileMap": [
+    {
+      "basePath": "dist",
+      "files": [
+        "**/*"
+      ]
+    }
+  ],
+  "author": "Alexander Hepp <alexander.hepp@sword-group.com>",
+  "license": "ISC",
+  "dependencies": {
+    "d3-array": "^2.4.0",
+    "d3-axis": "^1.0.12",
+    "d3-color": "^1.4.0",
+    "d3-force": "2.0.1",
+    "d3-scale": "^3.2.1",
+    "d3-scale-chromatic": "^1.5.0",
+    "d3-selection": "^1.4.1",
+    "d3-shape": "1.3.7",
+    "d3-timer": "^1.0.10",
+    "d3-transition": "^1.3.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.9.0",
+    "@babel/preset-env": "^7.9.0",
+    "babel-loader": "^8.1.0",
+    "clean-webpack-plugin": "^3.0.0",
+    "copy-webpack-plugin": "^5.1.1",
+    "core-js": "^3.6.4",
+    "css-loader": "^3.4.2",
+    "file-loader": "^5.1.0",
+    "html-webpack-plugin": "^3.2.0",
+    "json-loader": "^0.5.7",
+    "mini-css-extract-plugin": "^0.9.0",
+    "node-fetch": "^2.6.0",
+    "node-sass": "^4.14.1",
+    "optimize-css-assets-webpack-plugin": "^5.0.3",
+    "regenerator-runtime": "^0.13.5",
+    "sass-loader": "^8.0.2",
+    "standard": "^14.3.3",
+    "style-loader": "^1.1.3",
+    "webpack": "^4.42.1",
+    "webpack-cli": "^3.3.11",
+    "webpack-concat-plugin": "^3.0.0",
+    "webpack-dev-server": "^3.10.3",
+    "webpack-merge": "^4.2.2"
+  },
+  "standard": {
+    "globals": [
+      "$",
+      "jQuery"
+    ],
+    "ignore": [
+      "**/dist/",
+      "**/l10n",
+      "**/config",
+      "**/node_modules/**"
+    ]
+  }
+}

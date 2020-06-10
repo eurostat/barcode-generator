@@ -1,0 +1,166 @@
+/*-- Chart --*/
+.bg {
+	svg {
+		font: 10px sans-serif;
+		-webkit-tap-highlight-color: rgba(0,0,0,0);
+	}
+
+	path, line {
+		fill: none;
+		stroke: #000;
+	}
+
+	text {
+		-webkit-user-select: none;
+		-moz-user-select: none;
+		user-select: none;
+	}
+}
+
+/*-- Text on Chart --*/
+.bg-text {
+	&.bb-empty {
+		fill: #808080;
+		font-size: 2em;
+	}
+}
+
+
+
+/*-- Title --*/
+.bg-title {
+	font: 14px sans-serif;
+}
+
+/*-- Tooltip --*/
+.bg-tooltip-container {
+	z-index: 10;
+	user-select: none;
+}
+
+.bg-tooltip {
+	border-collapse:collapse;
+	border-spacing:0;
+	background-color:#fff;
+	empty-cells:show;
+	opacity: 0.9;
+	-webkit-box-shadow: 7px 7px 12px -9px rgb(119,119,119);
+	-moz-box-shadow: 7px 7px 12px -9px rgb(119,119,119);
+	box-shadow: 7px 7px 12px -9px rgb(119,119,119);
+
+	tr {
+		border:1px solid #CCC;
+	}
+
+	th {
+		background-color: #aaa;
+		font-size:14px;
+		padding:2px 5px;
+		text-align:left;
+		color:#FFF;
+	}
+
+	td {
+		font-size:13px;
+		padding: 3px 6px;
+		background-color:#fff;
+		border-left:1px dotted #999;
+
+		> span, > svg {
+			display: inline-block;
+			width: 10px;
+			height: 10px;
+			margin-right: 6px;
+		}
+	}
+
+	&.value {
+		text-align: right;
+	}
+}
+
+
+.y.axis line {
+	fill: none;
+	stroke: #990000;
+	shape-rendering: crispEdges;
+	stroke-width: 1px;
+}
+
+.x.axis line {
+	display: none;
+}
+
+.tick.g-baseline line {
+	stroke: #990000;
+	stroke-dasharray: 0;
+	stroke-width: 2px;
+} 
+
+.axis text {
+	font-family: sans-serif;
+	font-size: 12px;
+	pointer-events: none;
+	fill: #a6a6a6;
+}
+
+.y.axis text {
+	text-anchor: start !important;
+	font-size: 12px;
+	fill: #e6e6e6;
+}
+
+.domain {
+	display: none;
+}
+
+.line {
+	stroke: #262626;
+	stroke-width: 2px;
+	fill: none;
+}
+
+.area {
+	fill: #f2f2f2;
+	opacity: 0.4;
+}
+
+.g-label-text {
+	font-family: sans-serif;
+	font-size: 14px;
+}
+
+.g-label-circle {
+	fill: #4bc6df;
+}
+
+.micro-content {
+	padding: 15px;
+}
+
+.mc-kicker {
+	color: #a6a6a6;
+	text-transform: uppercase;
+	font-size: 12px;
+	margin: 0;
+}
+
+.bolded {
+	font-weight: 500;
+	color: #262626;
+}
+
+.mc-head {
+	color: #262626;
+	font-size: 24px;
+	font-weight: 300;
+	margin: 0 0 10px 0;
+}
+div.tooltip {   
+		position: absolute;           
+		text-align: left;                                       
+		font-family: sans-serif;
+		font-size: 14px;
+		pointer-events: none;   
+		color: #a6a6a6;    
+}
