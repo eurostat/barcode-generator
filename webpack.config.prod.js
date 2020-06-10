@@ -9,9 +9,6 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
 const config = {
   target: 'web',
-  node: {
-    fs: 'empty'
-  },
   entry: {
     'barcodegenerator.min': [
       './src/scss/barcodegenerator.scss',

@@ -2,13 +2,13 @@
  * Copyright (c) 2020 ~ present Eurostat
 
  * Main barcode class.
- * - Note: Instantiated via `bg.generate()`.
+ * - Note: Instantiated via `generateBarcode()`.
  * @class Barcode
  * @example
- * var barcode = bg.generate({options})
- * @memberof Chart
+ * var barcode = generateBarcode({options})
+ * @memberof Barcode
  * @example
- * var barcode = bg.generate({ ... });
+ * var barcode = generateBarcode({ ... });
  *
  */
 
@@ -66,11 +66,31 @@ export default class Barcode {
     const $$ = this
     const data = $$.config.data_json
 
+    const dataName = $$.config.data_name
+    const dataValue = $$.config.data_value
+
+    const tickCount = $$.config.tick_count || 6
+    const tickPadding = $$.config.tick_padding || 4
+
+    const leftPadding = $$.config.size_padding_left || 0
+    const rightPadding = $$.config.size_padding_right || 0
+
     // Margin conventions
     const margin = { top: 0, right: 0, bottom: 30, left: 0 }
     const constWidth = d3Select($$.config.bindto).node().clientWidth
-    const width = constWidth - margin.left - margin.right
-    const height = 125 - margin.top - margin.bottom
+    let width = constWidth - margin.left - margin.right
+    let height = 125 - margin.top - margin.bottom
+
+    if ($$.config.size_width !== undefined) {
+      width = $$.config.size_width
+    }
+    if ($$.config.size_height !== undefined) {
+      height = $$.config.size_height
+    }
+
+    const barHeight = $$.config.bar_height || height - 50
+    width += $$.config.size_padding_left
+    width += $$.config.size_padding_right
 
     // Appends the svg to the chart-container div
     const svg = d3Select($$.config.bindto)
@@ -86,7 +106,7 @@ export default class Barcode {
       .style('opacity', 0)
 
     // Creates the xScale
-    const xScale = d3ScaleLinear().range([0, width])
+    const xScale = d3ScaleLinear().range([0 + leftPadding, width - rightPadding])
 
     // Creates the yScale
     const yScale = d3ScaleLinear().range([height, 0])
@@ -94,21 +114,23 @@ export default class Barcode {
     // Defines the y axis styles
     const xAxis = d3AxisBottom()
       .scale(xScale)
-      .tickPadding(8)
-      .ticks(8)
+      .tickPadding(tickPadding)
+      .ticks(tickCount)
       .tickFormat($$.config.tick_format)
 
     // Organizes the data
     const maxX = d3Max(data, function (d) {
-      return d.value
+      return d[dataValue]
     })
 
     // Defines the xScale max
     xScale.domain(
       d3Extent(data, function (d) {
-        return d.value
+        return d[dataValue]
       })
     )
+
+    xScale.nice()
 
     // Defines the yScale max
     yScale.domain([0, 100])
@@ -127,43 +149,54 @@ export default class Barcode {
       .enter()
       .append('line')
       .attr('x1', function (d, i) {
-        return xScale(d.value)
+        return xScale(d[dataValue])
       })
       .attr('x2', function (d) {
-        return xScale(d.value)
+        return xScale(d[dataValue])
       })
       .attr('y1', 50)
-      .attr('y2', 100)
+      .attr('y2', barHeight)
+      .style('stroke', function (d) { return $$.config.color_normal(d) })
       .classed($$.config.bar_styleclass, true)
       .on('mouseover', function (d) {
-        var right = d3Event.pageX > window.innerWidth / 2
+        let eventPositionX = d3Mouse(this)[0]
+        let eventPositionY = d3Mouse(this)[1]
+
+        let tooltipX = eventPositionX
+
+        // translate the tooltip position with svg width.
+        if (width < constWidth) {
+          tooltipX = eventPositionX + ((constWidth - width) / 2) + 20
+        }
 
         d3Select(this)
+          .classed($$.config.bar_styleoverclass, true)
+          .classed($$.config.bar_styleclass, false)
           .transition()
           .duration(100)
           .attr('y1', 0)
-          .classed($$.config.bar_styleoverclass, true)
+          .style('stroke', function (d) { return $$.config.color_over(d) })
 
         tooltip.transition(300).style('opacity', 1)
         tooltip.html($$.config.tooltip_format(d))
 
-        var offset = right ? tooltip.node().offsetWidth + 5 : -5
-
         tooltip
-          .style('left', d3Event.pageX - offset + 'px')
-          .style('top', height - 80 + 'px')
+          .style('left', tooltipX + 'px')
+          .style('top', '0px')
 
-        callFn($$.config.data_onover, d, this.element)
+        callFn($$.config.data_onover, $$, d, this)
       })
       .on('mouseout', function (d) {
         d3Select(this)
+          .classed($$.config.bar_styleclass, true)
+          .classed($$.config.bar_styleoverclass, false)
           .transition()
           .duration(100)
           .attr('y1', 50)
-          .classed($$.config.bar_class)
+          .style('stroke', function (d) { return $$.config.color_normal(d) })
 
         tooltip.transition(300).style('opacity', 0)
-        callFn($$.config.data_onout, d, this.element)
+        callFn($$.config.data_onout, $$, d, this)
       })
 
     // RESPONSIVENESS
@@ -173,7 +206,7 @@ export default class Barcode {
       // new margin
       const newMargin = { top: 0, right: 0, bottom: 30, left: 0 }
 
-      const newconstWidth = d3Select('.g-chart').node().clientWidth
+      const newconstWidth = d3Select($$.config.bindto).node().clientWidth
       const newWidth = newconstWidth - newMargin.left - newMargin.right
 
       // Change the width of the svg
@@ -190,10 +223,10 @@ export default class Barcode {
 
       drawstrips
         .attr('x1', function (d, i) {
-          return xScale(d.trump_percent)
+          return xScale(d[dataValue])
         })
         .attr('x2', function (d) {
-          return xScale(d.trump_percent)
+          return xScale(d[dataValue])
         })
 
       // Updates xAxis

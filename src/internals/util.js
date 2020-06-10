@@ -36,7 +36,6 @@ const getOption = (options, key, defaultValue) =>
  */
 const callFn = (fn, ...args) => {
   const isFn = isFunction(fn)
-
   isFn && fn.call(...args)
   return isFn
 }

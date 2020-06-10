@@ -48,7 +48,7 @@ function generateCommonConfig (env) {
       path: path.resolve(__dirname, 'dist'),
       filename: '[name].js',
       libraryTarget: 'umd',
-      library: 'barcode-generator',
+      library: 'eurostatBarcodeGenerator',
       umdNamedDefine: true,
       globalObject: 'this'
     },

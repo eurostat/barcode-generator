@@ -1,7 +1,7 @@
 {
-  "name": "barcode-generator",
-  "version": "0.3.5",
-  "description": "a simplified barcode generator tool with ",
+  "name": "eurostat-barcode-generator",
+  "version": "0.4.0",
+  "description": "a simplified barcode generator tool with options",
   "main": "dist/barcodegenerator.js",
   "scripts": {
     "start": "webpack-dev-server --watch --color --env=dev --progress --mode=development --open",

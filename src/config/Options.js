@@ -67,6 +67,8 @@ export default class Options {
 			 * }
 			 */
 			size_width: undefined,
+			size_padding_right: undefined,
+			size_padding_left: undefined,
 			size_height: undefined,
 
 			/**
@@ -218,22 +220,24 @@ export default class Options {
 			data_onout: () => {},
 
 			data_json: undefined,
-			data_name: undefined,
-			data_value: undefined,
-			color_pattern: [],
-			color_threshold: {},
-			color_onover: undefined,
+			data_name: 'name',
+			data_value: 'value',
+			color_normal: undefined,
+			color_over: undefined,
 
 			bar_styleclass: undefined,
 			bar_styleoverclass: undefined,
+			bar_height: undefined,
 
 			tooltip_show: true,
 			tooltip_format: function(d) {
-				return '<span>' + d
+				return '<span>' + d[data_name] + ': ' + d[data_value]
 			},
 			tick_format: function(d) {
-				return d.value
-			}
+				return d[data_value]
+			},
+			tick_count: undefined,
+			tick_padding: undefined
 		};
 	}
 }
