@@ -222,6 +222,7 @@ export default class Options {
 			data_json: undefined,
 			data_name: 'name',
 			data_value: 'value',
+			data_id: 'id',
 			color_normal: undefined,
 			color_over: undefined,
 
@@ -233,6 +234,8 @@ export default class Options {
 			tooltip_format: function(d) {
 				return '<span>' + d[data_name] + ': ' + d[data_value]
 			},
+			tooltip_offset_left: 0,
+			tooltip_offset_top: 0,
 			tick_format: function(d) {
 				return d[data_value]
 			},

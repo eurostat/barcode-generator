@@ -45,7 +45,11 @@ import {
   scaleTime as d3ScaleTime
 } from 'd3-scale'
 
-import { axisLeft as d3AxisLeft, axisRight as d3AxisRight, axisBottom as d3AxisBottom } from 'd3-axis'
+import {
+  axisLeft as d3AxisLeft,
+  axisRight as d3AxisRight,
+  axisBottom as d3AxisBottom
+} from 'd3-axis'
 
 import {
   formatDefaultLocale as d3FormatDefaultLocale,
@@ -62,12 +66,61 @@ export default class Barcode {
     this.render()
   }
 
+  hoverEffect (dataId, hover, d3DataElement) {
+    const $$ = this
+
+    if (d3DataElement === undefined) {
+      d3DataElement = $$.config.data_json.find(
+        element => element[$$.config.data_id] === dataId
+      )
+    }
+
+    const tooltip = d3Select('#bar-tooltip')
+    if (hover) {
+      const barPosition = d3Select('#bar_' + dataId).node().getBoundingClientRect()
+      const eventPositionX = barPosition.left - d3Select($$.config.bindto).node().getBoundingClientRect().left + $$.config.tooltip_offset_left
+      const eventPositionY = barPosition.top + $$.config.tooltip_offset_left
+
+      let tooltipX = eventPositionX
+
+      tooltipX = eventPositionX + 20
+
+      d3Select('#bar_' + dataId)
+        .classed($$.config.bar_styleoverclass, true)
+        .classed($$.config.bar_styleclass, false)
+        .transition()
+        .duration(100)
+        .attr('y1', 0)
+        .style('stroke', function (d) {
+          return $$.config.color_over(d)
+        })
+
+      tooltip.transition(300).style('opacity', 1)
+      tooltip.html($$.config.tooltip_format(d3DataElement))
+
+      tooltip.style('left', tooltipX + 'px').style('top', '0px')
+    } else {
+      d3Select('#bar_' + dataId)
+        .classed($$.config.bar_styleclass, true)
+        .classed($$.config.bar_styleoverclass, false)
+        .transition()
+        .duration(100)
+        .attr('y1', 50)
+        .style('stroke', function (d) {
+          return $$.config.color_normal(d)
+        })
+
+      tooltip.transition(300).style('opacity', 0)
+    }
+  }
+
   render () {
     const $$ = this
     const data = $$.config.data_json
 
     const dataName = $$.config.data_name
     const dataValue = $$.config.data_value
+    const dataID = $$.config.data_id
 
     const tickCount = $$.config.tick_count || 6
     const tickPadding = $$.config.tick_padding || 4
@@ -103,10 +156,14 @@ export default class Barcode {
     const tooltip = d3Select($$.config.bindto)
       .append('div')
       .attr('class', 'tooltip')
+      .attr('id', 'bar-tooltip')
       .style('opacity', 0)
 
     // Creates the xScale
-    const xScale = d3ScaleLinear().range([0 + leftPadding, width - rightPadding])
+    const xScale = d3ScaleLinear().range([
+      0 + leftPadding,
+      width - rightPadding
+    ])
 
     // Creates the yScale
     const yScale = d3ScaleLinear().range([height, 0])
@@ -144,10 +201,13 @@ export default class Barcode {
 
     // Binds data to strips
     const drawstrips = svg
-      .selectAll('line.percent')
+      .selectAll('line')
       .data(data)
       .enter()
       .append('line')
+      .attr('id', function (d) {
+        return 'bar_' + d[dataID]
+      })
       .attr('x1', function (d, i) {
         return xScale(d[dataValue])
       })
@@ -156,46 +216,16 @@ export default class Barcode {
       })
       .attr('y1', 50)
       .attr('y2', barHeight)
-      .style('stroke', function (d) { return $$.config.color_normal(d) })
+      .style('stroke', function (d) {
+        return $$.config.color_normal(d)
+      })
       .classed($$.config.bar_styleclass, true)
       .on('mouseover', function (d) {
-        let eventPositionX = d3Mouse(this)[0]
-        let eventPositionY = d3Mouse(this)[1]
-
-        let tooltipX = eventPositionX
-
-        // translate the tooltip position with svg width.
-        if (width < constWidth) {
-          tooltipX = eventPositionX + ((constWidth - width) / 2) + 20
-        }
-
-        d3Select(this)
-          .classed($$.config.bar_styleoverclass, true)
-          .classed($$.config.bar_styleclass, false)
-          .transition()
-          .duration(100)
-          .attr('y1', 0)
-          .style('stroke', function (d) { return $$.config.color_over(d) })
-
-        tooltip.transition(300).style('opacity', 1)
-        tooltip.html($$.config.tooltip_format(d))
-
-        tooltip
-          .style('left', tooltipX + 'px')
-          .style('top', '0px')
-
+        $$.hoverEffect(d[dataID], true, d)
         callFn($$.config.data_onover, $$, d, this)
       })
       .on('mouseout', function (d) {
-        d3Select(this)
-          .classed($$.config.bar_styleclass, true)
-          .classed($$.config.bar_styleoverclass, false)
-          .transition()
-          .duration(100)
-          .attr('y1', 50)
-          .style('stroke', function (d) { return $$.config.color_normal(d) })
-
-        tooltip.transition(300).style('opacity', 0)
+        $$.hoverEffect(d[dataID], false, d)
         callFn($$.config.data_onout, $$, d, this)
       })
 
@@ -262,4 +292,13 @@ export default class Barcode {
     $$.selectChart.html('').classed(bindto.classname, true)
   }
 
+  triggerHover (dataElementId) {
+    this.hoverEffect(dataElementId, true)
+    // here, we want to trigger the hover over an element from the outside programmatically.
+  }
+
+  triggerOut (dataElementId) {
+    this.hoverEffect(dataElementId, false)
+    // here, we want to trigger the hover over an element from the outside programmatically.
+  }
 }
