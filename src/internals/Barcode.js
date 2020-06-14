@@ -7,9 +7,6 @@
  * @example
  * var barcode = generateBarcode({options})
  * @memberof Barcode
- * @example
- * var barcode = generateBarcode({ ... });
- *
  */
 
 import {
@@ -89,13 +86,13 @@ export default class Barcode {
         .classed($$.config.bar_styleoverclass, true)
         .classed($$.config.bar_styleclass, false)
         .transition()
-        .duration(100)
+        .duration($$.config.transition_duration)
         .attr('y1', 0)
         .style('stroke', function (d) {
           return $$.config.color_over(d)
         })
 
-      tooltip.transition(300).style('opacity', 1)
+      tooltip.transition($$.config.transition_duration).style('opacity', 1)
       tooltip.html($$.config.tooltip_format(d3DataElement))
 
       tooltip.style('left', tooltipX + 'px').style('top', '0px')
@@ -104,13 +101,13 @@ export default class Barcode {
         .classed($$.config.bar_styleclass, true)
         .classed($$.config.bar_styleoverclass, false)
         .transition()
-        .duration(100)
+        .duration($$.config.transition_duration)
         .attr('y1', 50)
         .style('stroke', function (d) {
-          return $$.config.color_normal(d)
+          return $$.config.color_default(d)
         })
 
-      tooltip.transition(300).style('opacity', 0)
+      tooltip.transition($$.config.transition_duration).style('opacity', 0)
     }
   }
 
@@ -125,8 +122,8 @@ export default class Barcode {
     const tickCount = $$.config.tick_count || 6
     const tickPadding = $$.config.tick_padding || 4
 
-    const leftPadding = $$.config.size_padding_left || 0
-    const rightPadding = $$.config.size_padding_right || 0
+    const leftPadding = $$.config.padding_left || 0
+    const rightPadding = $$.config.padding_right || 0
 
     // Margin conventions
     const margin = { top: 0, right: 0, bottom: 30, left: 0 }

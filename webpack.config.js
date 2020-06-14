@@ -1,6 +1,8 @@
+const pkg = require('./package.json')
 const path = require('path')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const StringReplacePlugin = require('string-replace-webpack-plugin')
 
 const rules = [
   {
@@ -34,6 +36,17 @@ const rules = [
         sourceMaps: false
       }
     }
+  },
+  {
+    test: /(\.js)$/,
+    loader: StringReplacePlugin.replace({
+      replacements: [
+        {
+          pattern: /#__VERSION__#/gi,
+          replacement: () => pkg.version
+        }
+      ]
+    })
   }
 ]
 

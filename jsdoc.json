@@ -1,0 +1,51 @@
+{
+	"tags": {
+		"allowUnknownTags": true
+	},
+	"source": {
+		"include": [
+			"./src",
+			"./README.md"
+		],
+		"includePattern": ".+\\.js$"
+	},
+	"plugins": [
+		"plugins/markdown"
+	],
+	"opts": {
+		"template": "node_modules/docdash",
+		"encoding": "utf8",
+		"destination": "doc/",
+		"recurse": true,
+		"verbose": true
+	},
+	"templates": {
+		"cleverLinks": false,
+		"monospaceLinks": false,
+		"default": {
+			"outputSourceFiles": true,
+			"includeDate": true
+		}
+	},
+	"docdash": {
+		"static": true,
+		"sort": true,
+		"sectionOrder": [
+			"Namespaces",
+			"Classes"
+		],
+		"meta": {
+			"title": "eurostat barcode generator documentation",
+			"description": "Re-usable, easy interface JavaScript barcode generation library based on D3 v4+",
+			"keyword": "chart, SVG, D3, Data Visualization, barcode"
+		},
+		"search": true,
+		"typedefs": true,
+		"menu":{
+			"GitHub": {
+				"href":"https://github.com/eurostat/barcode-generator",
+				"target":"_blank"
+			}
+		}
+	}
+}
