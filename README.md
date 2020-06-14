@@ -111,7 +111,7 @@ Use npm script to build eurostat-barcode-generator
 $ npm start
 
 # Build
-$ npm run build
+$ npm run build:prod
 
 # Generate jsdoc
 $ npm run jsdoc

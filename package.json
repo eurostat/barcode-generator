@@ -5,10 +5,10 @@
   "main": "dist/barcodegenerator.js",
   "scripts": {
     "start": "webpack-dev-server --watch --color --env=dev --progress --mode=development --open",
+    "build": "npm run build:prod",
     "build:prod": "webpack --env=prod --progress --profile --colors",
     "serve": "webpack-dev-server --watch --color --env=dev --progress --mode=development --open",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build:all": "npm run build:prod -- --useConfig:unemployment && npm run build:prod -- --useConfig:rdpersonnell && npm run build:prod -- --useConfig:forestarea",
     "jsdoc": "jsdoc -c jsdoc.json"
   },
   "sideEffects": [
