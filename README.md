@@ -61,7 +61,7 @@ import { generateBarcode, triggerHover } from "eurostat-barcode-generator";
 #### 2) Generate a chart with options
 ```js
 // generate the chart
-var chart = barcode.generateBarcode({
+var myBarcode = barcode.generateBarcode({
     bindto: "#barcode",
     data: {
       json: [
@@ -71,7 +71,7 @@ var chart = barcode.generateBarcode({
 });
 
 // call some API
-barcode.triggerHover( 'DE1' );
+myBarcode.triggerHover( 'DE1' );
 ```
 
 ## How to start developing eurostat-barcode-generator?
