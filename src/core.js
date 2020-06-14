@@ -22,11 +22,11 @@ let version = '#__VERSION__#'
  * @return {Barcode}
  * @see {@link Options} for different generation options
  * @example
- *  <!-- chart holder -->
+ *  <!-- chart holder in html -->
  * <div id="barcode"></div>
  * @example
  *   // generate chart with options
- *  let chart = barcode.generate({
+ *  let myBarcode = barcode.generate({
  *      "bindto": "#barcode",
  *      "data": {
  *          "json": [
@@ -39,7 +39,7 @@ let version = '#__VERSION__#'
  *
  *  // call some API
  *  // trigger as if the hover was done in the barcode programmatically ==> to interact with other options
- *  barcode.triggerHover("DE");
+ *  myBarcode.triggerHover("DE");
  */
 export function generateBarcode (config) {
   const options = mergeObj({}, defaults, config)
