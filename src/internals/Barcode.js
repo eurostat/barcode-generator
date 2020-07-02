@@ -139,8 +139,8 @@ export default class Barcode {
     }
 
     const barHeight = $$.config.bar_height || height - 50
-    width += $$.config.size_padding_left
-    width += $$.config.size_padding_right
+    width += $$.config.padding_left
+    width += $$.config.padding_right
 
     // Appends the svg to the chart-container div
     const svg = d3Select($$.config.bindto)

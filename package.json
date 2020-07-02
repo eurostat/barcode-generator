@@ -1,6 +1,6 @@
 {
   "name": "eurostat-barcode-generator",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "description": "a simplified barcode generator tool with options",
   "main": "dist/barcodegenerator.js",
   "scripts": {
