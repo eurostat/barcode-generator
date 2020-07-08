@@ -5,7 +5,9 @@
  * - Note: Instantiated via `generateBarcode()`.
  * @class Barcode
  * @example
- * var barcode = generateBarcode({options})
+ * import * as barcode from 'eurostat-barcode-generator'
+ * var myBarcode = barcode.generateBarcode({options})
+ * myBarcode.triggerHover('DE11')
  * @memberof Barcode
  */
 
@@ -56,6 +58,7 @@ import { isFunction, isObject, callFn } from './util'
 
 export default class Barcode {
   constructor (config) {
+    this.margin = { top: 0, right: 0, bottom: 30, left: 0 }
     this.config = this.getOptions()
     this.loadConfig(config)
     this.init()
@@ -66,6 +69,10 @@ export default class Barcode {
   hoverEffect (dataId, hover, d3DataElement) {
     const $$ = this
 
+    const height = $$.config.size_height || 125 - this.margin.top - this.margin.bottom
+    const barHeight = $$.config.bar_height || height / 1.3
+    const barOverHeight = $$.config.bar_overheight || barHeight * 1.3
+
     if (d3DataElement === undefined) {
       d3DataElement = $$.config.data_json.find(
         element => element[$$.config.data_id] === dataId
@@ -74,6 +81,9 @@ export default class Barcode {
 
     const tooltip = d3Select('#bar-tooltip')
     if (hover) {
+      if (d3Select('#bar_' + dataId).empty()) {
+        return
+      }
       const barPosition = d3Select('#bar_' + dataId).node().getBoundingClientRect()
       const eventPositionX = barPosition.left - d3Select($$.config.bindto).node().getBoundingClientRect().left + $$.config.tooltip_offset_left
       const eventPositionY = barPosition.top + $$.config.tooltip_offset_left
@@ -102,7 +112,7 @@ export default class Barcode {
         .classed($$.config.bar_styleoverclass, false)
         .transition()
         .duration($$.config.transition_duration)
-        .attr('y1', 50)
+        .attr('y1', barOverHeight - barHeight)
         .style('stroke', function (d) {
           return $$.config.color_default(d)
         })
@@ -111,6 +121,11 @@ export default class Barcode {
     }
   }
 
+  /**
+   * render the chart
+   * @return {undefined}
+   * @private
+   */
   render () {
     const $$ = this
     const data = $$.config.data_json
@@ -125,34 +140,32 @@ export default class Barcode {
     const leftPadding = $$.config.padding_left || 0
     const rightPadding = $$.config.padding_right || 0
 
+    const height = $$.config.size_height || 125 - this.margin.top - this.margin.bottom
+    const barHeight = $$.config.bar_height || height / 1.3
+    const barOverHeight = $$.config.bar_overheight || barHeight * 1.3
+
     // Margin conventions
-    const margin = { top: 0, right: 0, bottom: 30, left: 0 }
     const constWidth = d3Select($$.config.bindto).node().clientWidth
-    let width = constWidth - margin.left - margin.right
-    let height = 125 - margin.top - margin.bottom
+    let width = constWidth - this.margin.left - this.margin.right
 
     if ($$.config.size_width !== undefined) {
       width = $$.config.size_width
     }
-    if ($$.config.size_height !== undefined) {
-      height = $$.config.size_height
-    }
 
-    const barHeight = $$.config.bar_height || height - 50
     width += $$.config.padding_left
     width += $$.config.padding_right
 
     // Appends the svg to the chart-container div
     const svg = d3Select($$.config.bindto)
       .append('svg')
-      .attr('width', width + margin.left + margin.right)
-      .attr('height', height + margin.top + margin.bottom)
+      .attr('width', width + this.margin.left + this.margin.right)
+      .attr('height', height + this.margin.top + this.margin.bottom)
       .append('g')
-      .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
+      .attr('transform', 'translate(' + this.margin.left + ',' + this.margin.top + ')')
 
     const tooltip = d3Select($$.config.bindto)
       .append('div')
-      .attr('class', 'tooltip')
+      .attr('class', 'barcodetooltip')
       .attr('id', 'bar-tooltip')
       .style('opacity', 0)
 
@@ -211,10 +224,10 @@ export default class Barcode {
       .attr('x2', function (d) {
         return xScale(d[dataValue])
       })
-      .attr('y1', 50)
+      .attr('y1', barOverHeight - barHeight)
       .attr('y2', barHeight)
       .style('stroke', function (d) {
-        return $$.config.color_normal(d)
+        return $$.config.color_default(d)
       })
       .classed($$.config.bar_styleclass, true)
       .on('mouseover', function (d) {
@@ -230,14 +243,12 @@ export default class Barcode {
     d3Select(window).on('resize', resized)
 
     function resized () {
-      // new margin
-      const newMargin = { top: 0, right: 0, bottom: 30, left: 0 }
 
       const newconstWidth = d3Select($$.config.bindto).node().clientWidth
-      const newWidth = newconstWidth - newMargin.left - newMargin.right
+      const newWidth = newconstWidth - this.margin.left - this.margin.right
 
       // Change the width of the svg
-      d3Select('svg').attr('width', newWidth + newMargin.left + newMargin.right)
+      d3Select('svg').attr('width', newWidth + this.margin.left + this.margin.right)
 
       // Change the xScale
       xScale.range([0, newWidth])
@@ -261,6 +272,11 @@ export default class Barcode {
     }
   }
 
+  /**
+ * initialize the chart element
+ * @return {undefined}
+ * @private
+ */
   init () {
     const $$ = this
     const config = $$.config
@@ -289,11 +305,25 @@ export default class Barcode {
     $$.selectChart.html('').classed(bindto.classname, true)
   }
 
+  /**
+   * This method allows to trigger a hover effect on a bar data element programmatically
+   * @method triggerHover
+   * @instance
+   * @memberof Barcode
+   * @param {String} dataElementId The id of the data element that should be hovered
+   */
   triggerHover (dataElementId) {
     this.hoverEffect(dataElementId, true)
     // here, we want to trigger the hover over an element from the outside programmatically.
   }
 
+  /**
+   * This method allows to remove a hover effect on a bar data element programmatically
+   * @method triggerOut
+   * @instance
+   * @memberof Barcode
+   * @param {String} dataElementId The id of the data element for which the hover effect should be removed
+   */
   triggerOut (dataElementId) {
     this.hoverEffect(dataElementId, false)
     // here, we want to trigger the hover over an element from the outside programmatically.

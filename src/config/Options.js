@@ -109,9 +109,10 @@ export default class Options {
        * @property {String} [bar.styleclass] Defines the css class for data items (bars)
        * @property {String} [bar.styleoverclass] Defines the css class for data items (bars)
        * @property {Number} [bar.height] Defines the height to be used for data items (bars)
+       * @property {Number} [bar.overheight] Defines the height to be used for data items (bars) when being hovered
        * @example
        * bar: {
-       *    height: 20,
+       *    overheight: 80,
        *    styleclass="barcode-bar"
        *    styleoverclass="barcode-barover"
        * }
@@ -119,6 +120,7 @@ export default class Options {
       bar_styleclass: undefined,
       bar_styleoverclass: undefined,
       bar_height: undefined,
+      bar_overheight: undefined,
 
       /**
        * tooltip configuration

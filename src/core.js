@@ -25,8 +25,10 @@ let version = '#__VERSION__#'
  *  <!-- chart holder in html -->
  * <div id="barcode"></div>
  * @example
+ * import * as barcode from eurostat-barcode-generator
+ * @example
  *   // generate chart with options
- *  let myBarcode = barcode.generate({
+ *  let myBarcode = barcode.generateBarcode({
  *      "bindto": "#barcode",
  *      "data": {
  *          "json": [
