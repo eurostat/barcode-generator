@@ -112,7 +112,7 @@ export default class Barcode {
         .classed($$.config.bar_styleoverclass, false)
         .transition()
         .duration($$.config.transition_duration)
-        .attr('y1', barOverHeight - barHeight)
+        .attr('y1', barOverHeight)
         .style('stroke', function (d) {
           return $$.config.color_default(d)
         })
@@ -142,7 +142,7 @@ export default class Barcode {
 
     const height = $$.config.size_height || 125 - this.margin.top - this.margin.bottom
     const barHeight = $$.config.bar_height || height / 1.3
-    const barOverHeight = $$.config.bar_overheight || barHeight * 1.3
+    const barOverHeight = $$.config.bar_overheight || barHeight * 0.3
 
     // Margin conventions
     const constWidth = d3Select($$.config.bindto).node().clientWidth
@@ -224,7 +224,7 @@ export default class Barcode {
       .attr('x2', function (d) {
         return xScale(d[dataValue])
       })
-      .attr('y1', barOverHeight - barHeight)
+      .attr('y1', barOverHeight)
       .attr('y2', barHeight)
       .style('stroke', function (d) {
         return $$.config.color_default(d)

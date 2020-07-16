@@ -109,7 +109,7 @@ export default class Options {
        * @property {String} [bar.styleclass] Defines the css class for data items (bars)
        * @property {String} [bar.styleoverclass] Defines the css class for data items (bars)
        * @property {Number} [bar.height] Defines the height to be used for data items (bars)
-       * @property {Number} [bar.overheight] Defines the height to be used for data items (bars) when being hovered
+       * @property {Number} [bar.overheight] Defines the (additional) height to be used for data items (bars) when being hovered
        * @example
        * bar: {
        *    overheight: 80,
