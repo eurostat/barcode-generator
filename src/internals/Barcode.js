@@ -88,8 +88,9 @@ export default class Barcode {
       const eventPositionX = barPosition.left - d3Select($$.config.bindto).node().getBoundingClientRect().left + $$.config.tooltip_offset_left
       const eventPositionY = barPosition.top + $$.config.tooltip_offset_left
 
-      let tooltipX = eventPositionX
+      let curBarcodeWidth = d3Select('#barcode-chart').attr('width')
 
+      let tooltipX = Math.ceil(eventPositionX)
       tooltipX = eventPositionX + 20
 
       d3Select('#bar_' + dataId)
@@ -104,6 +105,11 @@ export default class Barcode {
 
       tooltip.transition($$.config.transition_duration).style('opacity', 1)
       tooltip.html($$.config.tooltip_format(d3DataElement))
+
+      const tooltipWidth = Math.ceil(tooltip.style('width').substring(0, tooltip.style('width').length - 2))
+      if ((tooltipX > Math.ceil(curBarcodeWidth) / 2)) {
+        tooltipX -= tooltipWidth + 40
+      }
 
       tooltip.style('left', tooltipX + 'px').style('top', '0px')
     } else {
@@ -158,6 +164,7 @@ export default class Barcode {
     // Appends the svg to the chart-container div
     const svg = d3Select($$.config.bindto)
       .append('svg')
+      .attr('id', 'barcode-chart')
       .attr('width', width + this.margin.left + this.margin.right)
       .attr('height', height + this.margin.top + this.margin.bottom)
       .append('g')
