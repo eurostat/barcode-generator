@@ -250,12 +250,13 @@ export default class Barcode {
     d3Select(window).on('resize', resized)
 
     function resized () {
-
       const newconstWidth = d3Select($$.config.bindto).node().clientWidth
-      const newWidth = newconstWidth - this.margin.left - this.margin.right
+      const newWidth = newconstWidth - $$.margin.left - $$.margin.right
 
       // Change the width of the svg
-      d3Select('svg').attr('width', newWidth + this.margin.left + this.margin.right)
+      d3Select($$.config.bindto).select('svg').attr('width', newWidth + $$.margin.left + $$.margin.right)
+
+      console.log('changing width to:', newWidth + $$.margin.left + $$.margin.right)
 
       // Change the xScale
       xScale.range([0, newWidth])
